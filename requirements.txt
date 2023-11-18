@@ -1,0 +1,7 @@
+tensorflow
+tensorflow[and-cuda]
+matplotlib
+tensorflow-datasets
+ipywidgets
+cuda-python
+pandas
