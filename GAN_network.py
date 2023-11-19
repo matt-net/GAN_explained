@@ -4,6 +4,9 @@ import pandas as pd
 import os
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Conv2D, Dense, Flatten, Reshape, LeakyReLU, Dropout, UpSampling2D
+
+from tensorflow.python.keras.models import Model
+
 import numpy as np
 
 
@@ -144,6 +147,8 @@ class GenAI_network:
 
         return model
 
+
+
     def plot_generated_image(self, gen_image):
         current_directory = os.getcwd()
 
@@ -168,3 +173,5 @@ class GenAI_network:
         plt.tight_layout()
         plt.savefig(plot_filename)
         plt.show()
+
+
