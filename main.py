@@ -6,6 +6,7 @@ import numpy as np
 from GAN_network import GenAI_network
 from GAN_agent import FashionGAN
 
+
 if __name__ == '__main__':
 
     network = GenAI_network()
