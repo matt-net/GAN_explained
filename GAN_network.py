@@ -95,7 +95,7 @@ class GenAI_network:
 
         # Up sampling block 2
         model.add(UpSampling2D())  # Double it
-        model.add(Conv2D(125, 5, padding='same'))
+        model.add(Conv2D(128, 5, padding='same'))
         model.add(LeakyReLU(0.2))
 
         # Down sampling block 1
@@ -109,5 +109,62 @@ class GenAI_network:
         # Conv layer to get one channel
         model.add(Conv2D(1, 4, padding='same', activation='sigmoid'))
 
-        model.summary()
+        # model.summary()
         return model
+
+    def build_discriminator(self):
+        model = Sequential()
+
+        # First Conv Block
+        model.add(Conv2D(32, 5, input_shape=(28, 28, 1)))
+        model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.4))
+
+        # Second Conv Block
+        model.add(Conv2D(64, 5))
+        model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.4))
+
+        # Third Conv Block
+        model.add(Conv2D(128, 5))
+        model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.4))
+
+        # Third Conv Block
+        model.add(Conv2D(256, 5))
+        model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.4))
+
+        # Flatten and then pass to dense layer
+        model.add(Flatten())
+        model.add(Dropout(0.4))
+        model.add(Dense(1, activation='sigmoid'))  # : False, 0 : True1
+
+        model.summary()
+
+        return model
+
+    def plot_generated_image(self, gen_image):
+        current_directory = os.getcwd()
+
+        plots_directory = os.path.join(current_directory, 'plots')
+        os.makedirs(plots_directory, exist_ok=True)
+
+        visualizations_directory = os.path.join(plots_directory, 'visualisations')
+        os.makedirs(visualizations_directory, exist_ok=True)
+        num_rows = 2
+        num_cols = 3
+
+        fig, axes = plt.subplots(num_rows, num_cols, figsize=(10, 7))
+
+        for i in range(num_rows):
+            for j in range(num_cols):
+                index = i * num_cols + j
+                axes[i, j].imshow(gen_image[index], cmap='gray')
+                axes[i, j].axis('off')  # Turn off axis labels for better visualization
+
+        # Save the plot in the 'visualisations' directory
+        plot_filename = os.path.join(visualizations_directory, 'fashion_mnist_generated.png')
+        plt.tight_layout()
+        plt.savefig(plot_filename)
+        plt.show()
