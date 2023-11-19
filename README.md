@@ -1,3 +1,3 @@
 # GAN_explained
 
-![Alt Text](plots/fashion_mnist_visualization.png)
+![Alt Text](plots/visualisations/fashion_mnist_visualization.png)
