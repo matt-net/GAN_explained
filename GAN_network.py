@@ -2,7 +2,8 @@ import tensorflow as tf
 from matplotlib import pyplot as plt
 import pandas as pd
 import os
-
+from tensorflow.python.keras import Sequential
+from tensorflow.python.keras.layers import Conv2D, Dense, Flatten, Reshape, LeakyReLU, Dropout, UpSampling2D
 import numpy as np
 
 
@@ -79,3 +80,34 @@ class GenAI_network:
         self.batched = dataset.batch(self.batch)
 
         return dataset, self.batched
+
+    def build_generator(self):
+        model = Sequential()
+        # Takes in random values and reshapes it to 7x7x128
+        model.add(Dense(7 * 7 * 128, input_dim=128))
+        model.add(LeakyReLU(0.2))
+        model.add(Reshape((7, 7, 128)))
+
+        # Up sampling block 1
+        model.add(UpSampling2D())  # Double it
+        model.add(Conv2D(128, 5, padding='same'))
+        model.add(LeakyReLU(0.2))
+
+        # Up sampling block 2
+        model.add(UpSampling2D())  # Double it
+        model.add(Conv2D(125, 5, padding='same'))
+        model.add(LeakyReLU(0.2))
+
+        # Down sampling block 1
+        model.add(Conv2D(128, 4, padding='same'))
+        model.add(LeakyReLU(0.2))
+
+        # Down sampling block 2
+        model.add(Conv2D(128, 4, padding='same'))
+        model.add(LeakyReLU(0.2))
+
+        # Conv layer to get one channel
+        model.add(Conv2D(1, 4, padding='same', activation='sigmoid'))
+
+        model.summary()
+        return model
